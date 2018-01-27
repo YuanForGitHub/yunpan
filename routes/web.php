@@ -17,4 +17,6 @@ Route::get('/show', 'FileController@showFile');
 
 Route::post('/upload', 'FileController@uploadFile');
 
+Route::get('/delete/{fileName}', 'FileController@deleteFile');
+
 Route::get('/download/{fileName}', 'FileController@downloadFile');

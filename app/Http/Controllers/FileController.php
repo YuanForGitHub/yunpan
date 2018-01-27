@@ -32,13 +32,25 @@ class FileController extends Controller
         foreach($file as $val){
             $fileName = str_after($val, 'homeworkFiles/');
             $str .= '<a href="download/'.$fileName.'">'.$fileName.'</a>';
+            $str .= '--'.'<a href="delete/'.$fileName.'">删除</a>';
             $str .= '<br>';
         }
         return $str;
     }
 
-    public function downloadFile($fileName="10.jpg"){
+    public function downloadFile($fileName=''){
         // $fileName = '10.jpg';
+        if($fileName==''){
+            return 'nothing';
+        }
         return response()->download(storage_path('app/public/homeworkFiles/'.$fileName));
+    }
+
+    public function deleteFile($fileName=''){
+        if($fileName==''){
+            return 'nothing';
+        }
+        $result = Storage::delete('public/homeworkFiles/'.$fileName);
+        dd($result);
     }
 }
