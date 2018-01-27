@@ -27,15 +27,16 @@ class FileController extends Controller
     }
 
     public function showFile(){
-        $file = Storage::files('public/homeworkFiles');
-        $str = '';
-        foreach($file as $val){
-            $fileName = str_after($val, 'homeworkFiles/');
-            $str .= '<a href="download/'.$fileName.'">'.$fileName.'</a>';
-            $str .= '--'.'<a href="delete/'.$fileName.'">删除</a>';
-            $str .= '<br>';
-        }
-        return $str;
+        // $file = Storage::files('public/homeworkFiles');
+        // $str = '';
+        // foreach($file as $val){
+        //     $fileName = str_after($val, 'homeworkFiles/');
+        //     $str .= '<a href="download/'.$fileName.'">'.$fileName.'</a>';
+        //     $str .= '--'.'<a href="delete/'.$fileName.'">删除</a>';
+        //     $str .= '<br>';
+        // }
+        // return $str;
+        return view('show');
     }
 
     public function downloadFile($fileName=''){
