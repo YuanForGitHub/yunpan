@@ -30,13 +30,15 @@ class FileController extends Controller
         $file = Storage::files('public/homeworkFiles');
         $str = '';
         foreach($file as $val){
-            $str .= str_after($val, 'homeworkFiles/')."<br>";
+            $fileName = str_after($val, 'homeworkFiles/');
+            $str .= '<a href="download/'.$fileName.'">'.$fileName.'</a>';
+            $str .= '<br>';
         }
         return $str;
     }
 
-    public function downloadFile(){
-        $fileName = '10.jpg';
+    public function downloadFile($fileName="10.jpg"){
+        // $fileName = '10.jpg';
         return response()->download(storage_path('app/public/homeworkFiles/'.$fileName));
     }
 }

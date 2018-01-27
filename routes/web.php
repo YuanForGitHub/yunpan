@@ -13,6 +13,8 @@
 
 Route::get('/', 'FileController@index');
 
+Route::get('/show', 'FileController@showFile');
+
 Route::post('/upload', 'FileController@uploadFile');
 
-Route::get('/show', 'FileController@showFile');
+Route::get('/download/{fileName}', 'FileController@downloadFile');
