@@ -34,7 +34,12 @@
             <div class="col-md-1 pull-right">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a class="btn btn-default" href="{{ action('FileController@index') }}">上传文件</a>
+                        <a id="fileButton" class="btn btn-default" href="#">上传文件</a>
+                        <form class="hidden" action="upload" method="post" enctype="multipart/form-data">
+                            {{ csrf_field() }}
+                            <input type="file" name="homework" id="file">
+                            <input type="submit" value="上传文件" id="submit">
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -64,19 +69,27 @@
         <table class="table table-bordered">
             <tr>
                 <th>文件名</th>
-                <th>上传时间</th>
                 <th>操作</th>
             </tr>
             <tr>
                 <td>10.jpg</td>
-                <td>2017-01-02</td>
                 <td>删除</td>
             </tr>
         </table>
     </div>
 </body>
 
-<script src="jquery-3.2.1/jquery-3.2.1.min.js"></script>
+<script src="bootstrap/js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(function(){
+        $("#fileButton").click(function(){
+            $("#file").trigger("click");
+            $("#file").on("change", function(){
+                $("#submit").trigger("click");
+            })
+        })
+    })
+</script>
 
 </html>
