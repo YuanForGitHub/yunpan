@@ -16,7 +16,7 @@
                 <a href="{{url('show/music')}}">音乐</a>
             </li>
             <li>
-                <a href="http://baidu.com">返回</a>
+                <a href="http://scauwlb.top/homework">返回</a>
             </li>
         </ul>
     </div>
