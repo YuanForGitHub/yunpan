@@ -21,6 +21,9 @@ class FileController extends Controller
                 $name = $time.$file->getClientOriginalName();
                 $path = $file->getRealPath();
 
+                // 编码转换
+                $name = urlencode($name);
+
                 $file->storeAs('public/homeworkFiles', $name);
                 Storage::setVisibility('public/homeworkFiles/'.$name, 'public');
             }
@@ -29,15 +32,6 @@ class FileController extends Controller
     }
 
     public function showFile($type=''){
-        // $file = Storage::files('public/homeworkFiles');
-        // $str = '';
-        // foreach($file as $val){
-        //     $fileName = str_after($val, 'homeworkFiles/');
-        //     $str .= '<a href="download/'.$fileName.'">'.$fileName.'</a>';
-        //     $str .= '--'.'<a href="delete/'.$fileName.'">删除</a>';
-        //     $str .= '<br>';
-        // }
-        // return $str;
         $arr = [];
         $file = Storage::files('public/homeworkFiles');
         if($type=='' || $type=='all'){
@@ -97,6 +91,7 @@ class FileController extends Controller
         if($fileName==''){
             return 'nothing';
         }
+        $fileName = urlencode($fileName);
         $result = Storage::delete('public/homeworkFiles/'.$fileName);
         // dd($result);
         return redirect('show/all');

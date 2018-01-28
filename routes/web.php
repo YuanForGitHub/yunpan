@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'FileController@index');
+Route::get('/', 'FileController@showFile');
 
 Route::get('/show/{type?}', 'FileController@showFile');
 
