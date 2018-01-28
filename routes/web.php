@@ -13,7 +13,7 @@
 
 Route::get('/', 'FileController@index');
 
-Route::get('/show/{type}', 'FileController@showFile');
+Route::get('/show/{type?}', 'FileController@showFile');
 
 Route::post('/upload', 'FileController@uploadFile');
 

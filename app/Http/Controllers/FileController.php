@@ -17,16 +17,18 @@ class FileController extends Controller
         if($request->isMethod('POST')){
             $file = $request->file('homework');
             if($file->isValid()){
-                $name = $file->getClientOriginalName();
+                $time = '('.date('Y-m-d').')';
+                $name = $time.$file->getClientOriginalName();
                 $path = $file->getRealPath();
-               
+
                 $file->storeAs('public/homeworkFiles', $name);
-                return 'ok';
+                Storage::setVisibility('public/homeworkFiles/'.$name, 'public');
             }
         }
+        return redirect('show/all');
     }
 
-    public function showFile(){
+    public function showFile($type=''){
         // $file = Storage::files('public/homeworkFiles');
         // $str = '';
         // foreach($file as $val){
@@ -36,7 +38,51 @@ class FileController extends Controller
         //     $str .= '<br>';
         // }
         // return $str;
-        return view('show');
+        $arr = [];
+        $file = Storage::files('public/homeworkFiles');
+        if($type=='' || $type=='all'){
+            foreach($file as $val){
+                $fileName = str_after($val, 'homeworkFiles/');
+                $arr[] = $fileName;
+            }
+        }
+        elseif($type=='text'){
+            foreach($file as $val){
+                $fileName = str_after($val, 'homeworkFiles/');
+                $mime = str_after($fileName, '.');
+                if($mime=='txt' || $mime=='doc' || $mime=='docx' || $mime=='xlxs' || $mime=='xls' || $mime=='pdf'){
+                    $arr[] = $fileName;
+                }
+            }
+        }
+        elseif($type=='pic'){
+            foreach($file as $val){
+                $fileName = str_after($val, 'homeworkFiles/');
+                $mime = str_after($fileName, '.');
+                if($mime=='jpg' || $mime=='jpeg' || $mime=='png' || $mime=='gif'){
+                    $arr[] = $fileName;
+                }
+            }
+        }
+        elseif($type=='video'){
+            foreach($file as $val){
+                $fileName = str_after($val, 'homeworkFiles/');
+                $mime = str_after($fileName, '.');
+                if($mime=='mp4' || $mime=='avi'){
+                    $arr[] = $fileName;
+                }
+            }
+        }
+        elseif($type=='music'){
+            foreach($file as $val){
+                $fileName = str_after($val, 'homeworkFiles/');
+                $mime = str_after($fileName, '.');
+                if($mime=='mp3'){
+                    $arr[] = $fileName;
+                }
+            }
+        }
+        return view('show', compact('arr'));
     }
 
     public function downloadFile($fileName=''){
@@ -52,6 +98,7 @@ class FileController extends Controller
             return 'nothing';
         }
         $result = Storage::delete('public/homeworkFiles/'.$fileName);
-        dd($result);
+        // dd($result);
+        return redirect('show/all');
     }
 }
