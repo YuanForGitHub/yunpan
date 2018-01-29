@@ -17,8 +17,7 @@ class FileController extends Controller
         if($request->isMethod('POST')){
             $file = $request->file('homework');
             if($file->isValid()){
-                $time = '('.date('Y-m-d').')';
-                $name = $time.$file->getClientOriginalName();
+                $name = $file->getClientOriginalName();
                 $path = $file->getRealPath();
 
                 // 编码转换
@@ -33,11 +32,16 @@ class FileController extends Controller
 
     public function showFile($type=''){
         $arr = [];
+        $names = [];
+        $sizes = [];
+        $time = [];
         $file = Storage::files('public/homeworkFiles');
         if($type=='' || $type=='all'){
             foreach($file as $val){
                 $fileName = str_after($val, 'homeworkFiles/');
-                $arr[] = $fileName;
+                $names[] = $fileName;
+                $sizes[] = $this->exchange(Storage::size($val));
+                $time[] = Storage::lastModified($val);
             }
         }
         elseif($type=='text'){
@@ -45,7 +49,9 @@ class FileController extends Controller
                 $fileName = str_after($val, 'homeworkFiles/');
                 $mime = str_after($fileName, '.');
                 if($mime=='txt' || $mime=='doc' || $mime=='docx' || $mime=='xlxs' || $mime=='xls' || $mime=='pdf'){
-                    $arr[] = $fileName;
+                    $names[] = $fileName;
+                    $sizes[] = $this->exchange(Storage::size($val));
+                    $time[] = Storage::lastModified($val);
                 }
             }
         }
@@ -54,7 +60,9 @@ class FileController extends Controller
                 $fileName = str_after($val, 'homeworkFiles/');
                 $mime = str_after($fileName, '.');
                 if($mime=='jpg' || $mime=='jpeg' || $mime=='png' || $mime=='gif'){
-                    $arr[] = $fileName;
+                    $names[] = $fileName;
+                    $sizes[] = $this->exchange(Storage::size($val));
+                    $time[] = Storage::lastModified($val);
                 }
             }
         }
@@ -63,7 +71,9 @@ class FileController extends Controller
                 $fileName = str_after($val, 'homeworkFiles/');
                 $mime = str_after($fileName, '.');
                 if($mime=='mp4' || $mime=='avi'){
-                    $arr[] = $fileName;
+                    $names[] = $fileName;
+                    $sizes[] = $this->exchange(Storage::size($val));
+                    $time[] = Storage::lastModified($val);
                 }
             }
         }
@@ -72,11 +82,29 @@ class FileController extends Controller
                 $fileName = str_after($val, 'homeworkFiles/');
                 $mime = str_after($fileName, '.');
                 if($mime=='mp3'){
-                    $arr[] = $fileName;
+                    $names[] = $fileName;
+                    $sizes[] = $this->exchange(Storage::size($val));
+                    $time[] = Storage::lastModified($val);
                 }
             }
         }
+        $arr = [$names, $sizes, $time];
         return view('show', compact('arr'));
+    }
+
+    private function exchange($size=0){
+        if($size<1024){
+            return $size.'B';
+        }
+        elseif($size<1024*1204){
+            return ceil($size/1024).'KB';
+        }
+        elseif($size<1024*1024*1024){
+            return ceil($size/1024/1024).'M';
+        }
+        else{
+            return '6爆了，我居然不知道多大？！';
+        }
     }
 
     public function downloadFile($fileName=''){
