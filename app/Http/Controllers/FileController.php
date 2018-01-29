@@ -84,7 +84,8 @@ class FileController extends Controller
         if($fileName==''){
             return 'nothing';
         }
-        return response()->download(storage_path('app/public/homeworkFiles/'.$fileName));
+        $fileName = urlencode($fileName);
+        return response()->download(storage_path('app/public/homeworkFiles/'.$fileName), urldecode($fileName));
     }
 
     public function deleteFile($fileName=''){
