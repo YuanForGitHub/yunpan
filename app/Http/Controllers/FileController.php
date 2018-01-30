@@ -20,7 +20,8 @@ class FileController extends Controller
                 $name = $file->getClientOriginalName();
                 $path = $file->getRealPath();
 
-                // 编码转换
+                // 编码转换，双重转换，防止空格和加号混淆
+                $name = urlencode($name);
                 $name = urlencode($name);
 
                 $file->storeAs('public/homeworkFiles', $name);
@@ -66,11 +67,11 @@ class FileController extends Controller
                 }
             }
         }
-        elseif($type=='video'){
+        elseif($type=='compress'){
             foreach($file as $val){
                 $fileName = str_after($val, 'homeworkFiles/');
                 $mime = str_after($fileName, '.');
-                if($mime=='mp4' || $mime=='avi'){
+                if($mime=='zip' || $mime=='rar'){
                     $names[] = $fileName;
                     $sizes[] = $this->exchange(Storage::size($val));
                     $time[] = Storage::lastModified($val);
@@ -113,7 +114,7 @@ class FileController extends Controller
             return 'nothing';
         }
         $fileName = urlencode($fileName);
-        return response()->download(storage_path('app/public/homeworkFiles/'.$fileName), urldecode($fileName));
+        return response()->download(storage_path('app/public/homeworkFiles/'.$fileName), urldecode(urldecode($fileName)));
     }
 
     public function deleteFile($fileName=''){

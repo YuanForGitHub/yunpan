@@ -10,10 +10,10 @@
                 <a href="{{url('show/pic')}}">图片</a>
             </li>
             <li>
-                <a href="{{url('show/video')}}">视频</a>
+                <a href="{{url('show/music')}}">音乐</a>
             </li>
             <li>
-                <a href="{{url('show/music')}}">音乐</a>
+                <a href="{{url('show/compress')}}">压缩包</a>
             </li>
             <li>
                 <a href="http://scauwlb.top/homework">返回</a>

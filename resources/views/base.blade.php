@@ -49,7 +49,7 @@
             $("#file").trigger("click");
             $("#file").on("change", function(){
                 $("#submit").trigger("click");
-                alert('上传成功~');
+                alert('准备上传，请稍等（完成后页面会自动刷新）');
             })
         })
     })

@@ -10,7 +10,7 @@
 
 @section('content')
 <div id="content" class="col-sm-9 col-md-10">
-    @if(empty($arr))
+    @if(empty($arr[0]))
         <div class="alert alert-info" role="alert">没有对应文件</div>
     @else
         <table class="table table-bordered">
@@ -27,7 +27,7 @@
             @endforeach  --}}
             @for($i=0; $i<sizeof($arr[0]); $i++)
                 <tr>
-                    <td><a href="{{ action('FileController@downloadFile', $arr[0][$i]) }}">{{ urldecode($arr[0][$i]) }}</a></td>
+                    <td><a href="{{ action('FileController@downloadFile', $arr[0][$i]) }}">{{ urldecode(urldecode($arr[0][$i])) }}</a></td>
                     <td>{{ $arr[1][$i] }}
                     <td>{{ date('Y-m-d', $arr[2][$i]) }}
                     <td><a href="{{ action('FileController@deleteFile', $arr[0][$i]) }}" id="delete" onclick="javascript:return del();">删除</a></td>
