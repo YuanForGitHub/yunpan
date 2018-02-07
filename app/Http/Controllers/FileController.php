@@ -13,6 +13,35 @@ class FileController extends Controller
         return view('index');
     }
 
+    private function encode($str){
+        if(!isset($str)){
+            return;
+        }
+        // 双重转换，防止空格和加号混淆
+        $str = urlencode($str);
+        $str = urlencode($str);
+        return $str;
+    }
+
+    private function decode($str){
+        if(!isset($str)){
+            return;
+        }
+        $str = urldecode($str);
+        $str = urldecode($str);
+        return $str;
+    }
+
+    private function judge($name){
+        $array = Storage::files('public/homeworkFiles');
+        if(in_array(('public/homeworkFiles/'.$name), $array)){
+            $name = $this->decode($name);
+            $name = '('.date('y/m/d').')'.$name;
+            $name = $this->encode($name);
+        }
+        return $name;
+    }
+
     public function uploadFile(Request $request){
         if($request->isMethod('POST')){
             $file = $request->file('homework');
@@ -20,10 +49,14 @@ class FileController extends Controller
                 $name = $file->getClientOriginalName();
                 $path = $file->getRealPath();
 
-                // 编码转换，双重转换，防止空格和加号混淆
-                $name = urlencode($name);
-                $name = urlencode($name);
+                // 编码转换
+                $name = $this->encode($name);
 
+                // 判断是否有重复文件
+                $name = $this->judge($name);
+                // return var_dump($name);
+                
+                // 保存文件
                 $file->storeAs('public/homeworkFiles', $name);
                 Storage::setVisibility('public/homeworkFiles/'.$name, 'public');
             }
