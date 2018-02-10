@@ -42,6 +42,29 @@ class FileController extends Controller
         return $name;
     }
 
+    private function sortByTime($arr = NULL){
+        if($arr==NULL){
+            return array();
+        }
+        $len = count($arr[0]);
+        for($i=0; $i<($len-1); $i++){
+            for($j=0; $j<($len-1-$i); $j++){
+                if($arr[2][$j]<$arr[2][$j+1]){
+                    $name = $arr[0][$j];
+                    $size = $arr[1][$j];
+                    $time = $arr[2][$j];
+                    $arr[0][$j] = $arr[0][$j+1];
+                    $arr[1][$j] = $arr[1][$j+1];
+                    $arr[2][$j] = $arr[2][$j+1];
+                    $arr[0][$j+1] = $name;                               
+                    $arr[1][$j+1] = $size;
+                    $arr[2][$j+1] = $time;
+                }
+            }
+        }
+        return $arr;
+    }
+
     public function uploadFile(Request $request){
         if($request->isMethod('POST')){
             $file = $request->file('homework');
@@ -123,6 +146,8 @@ class FileController extends Controller
             }
         }
         $arr = [$names, $sizes, $time];
+        // 时间排序
+        $arr = $this->sortByTime($arr);
         return view('show', compact('arr'));
     }
 
